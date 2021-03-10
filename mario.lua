@@ -2239,9 +2239,23 @@ function mario:stompenemy(a, b, c, d, side)
 		b:stomp(self.x, self)
 		
 		if b.speedx == 0 or (b.flying and b.small == false) then
-			addpoints(mariocombo[self.combo], self.x, self.y)
+			--addpoints(mariocombo[self.combo], self.x, self.y)
+			--if self.combo < #mariocombo then
+			--	self.combo = self.combo + 1
+			--end
 			if self.combo < #mariocombo then
-				self.combo = self.combo + 1
+				addpoints(mariocombo[self.combo], self.x, self.y)
+				if not b.stompcombosuppressor then
+					self.combo = self.combo + 1
+				end
+			else
+				if mariolivecount ~= false then
+					for i = 1, players do
+						mariolives[i] = mariolives[i]+1
+					end
+				end
+				table.insert(scrollingscores, scrollingscore:new("1up", self.x, self.y))
+				playsound("oneup")
 			end
 		
 			local grav = self.gravity or yacceleration
